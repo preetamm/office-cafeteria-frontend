@@ -1,7 +1,7 @@
 import React from "react";
-import { itemQuantity, menuItem } from "../../redux/menu/menu.selector";
+import { menuItem } from "../../redux/menu/menu.selector";
 import QuantityToggler from "./quanityToggle.component";
-import { connect, useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import img from '../../icons/food.png'
 
 

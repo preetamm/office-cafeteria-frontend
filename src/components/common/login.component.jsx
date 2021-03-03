@@ -2,12 +2,12 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FormInputgroup from "./formInputGroup.component";
 import Button from "./button.component";
-import { isMobile, MobileView, BrowserView } from "react-device-detect";
-import { Formik, Field, Form } from "formik";
+import authType from '../../constants/auth';
+import { Formik, Form } from "formik";
 import { loginUser } from "../../redux/auth/auth.slice";
 
 
-const LoginForm = () => {
+const LoginForm = ({ setOnBoardingType }) => {
   const dispatch = useDispatch();
   var { auth } = useSelector((state) => state.authSlice);
 
@@ -31,9 +31,13 @@ const LoginForm = () => {
               label={auth.login === 'Loading' ? 'Loading' : "Login"}
               type="submit"
               className={
-                "self-center bg-primary mt-8 px-8 py-2 text-white text-lg"
+                "self-center bg-primary mt-8 px-8 py-2 text-white text-lg font-medium rounded-lg"
               }
             ></Button>
+            <div className='self-center mt-8'>
+              <p className='text-sm font-normal '>Not have a Account?</p>
+              <span className='text-blue-700 font-normal' onClick={() => { setOnBoardingType(authType.REGISTER) }}>Register</span>
+            </div>
           </div>
         </div>
       </Form>

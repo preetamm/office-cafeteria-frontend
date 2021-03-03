@@ -5,20 +5,38 @@ import { ReactComponent as CartLogo } from "../../icons/cartIcon.svg";
 import { ReactComponent as MenuLogo } from "../../icons/menuIcon.svg";
 import { isMobile } from "react-device-detect";
 
-const NavigationBar = () => {
+const NavigationBar = ({toggleNavBar, isOpen}) => {
+  /*window.addEventListener('load', function () {
+    var menu = false;
+    document.querySelector('.menu-logo').addEventListener('click', () => {
+      //alert("menu clicked ");
+      //check if menu is opne or not
+      if(!menu){
+        document.getElementById('nav-bar-mobile').style.transform = 'translateX(0%)';
+        menu = true;
+      }else{
+        document.getElementById('nav-bar-mobile').style.transform = 'translateX(-100%)';
+        menu = false;
+      }
+      
+    })
+  })*/
   var { auth } = useSelector((state) => state.authSlice);
+  let toggleNav = () => {
+    console.log(isOpen);
+    isOpen? toggleNavBar(false) : toggleNavBar(true)
+  }
   return (
     <React.Fragment>
       <div className="flex text-primary font-medium   bg-white w-full h-8screen items-center px-6  sm:px-24">
         {isMobile && (
-          <div className="menu-logo ">
+          <div className="menu-logo" onClick={() => { toggleNav() }}>
             <MenuLogo />
           </div>
         )}
         <div
-          className={`${
-            isMobile ? "mx-auto " : "sm:mr-auto"
-          } text-primary font-medium`}
+          className={`${isMobile ? "mx-auto " : "sm:mr-auto"
+            } text-primary font-medium`}
         >
           Pantry Pals
         </div>
@@ -30,24 +48,22 @@ const NavigationBar = () => {
             </Link>
           </div>
         ) : (
-          <div className="menu-item  flex ">
-            <Link className="nav mx-10 sm:mx-6" to="/">
-              Menu
+            <div className="menu-item  flex ">
+              <Link className="nav mx-10 sm:mx-6" to="/">
+                Menu
             </Link>
-            <Link className="nav-item mx-10 sm:mx-6" to="/cart">
-              Cart
-            </Link>
-            {auth.login?.user ? (
-              <Link className="nav-item mx-10 sm:mx-6" to="/profile">
-                Profile
-              </Link>
-            ) : (
-              <Link className="nav-item mx-10 sm:mx-6" to="/onBoarding">
-                Login/Register
-              </Link>
-            )}
-          </div>
-        )}
+
+              {auth.login?.user ? (
+                <Link className="nav-item mx-10 sm:mx-6" to="/profile">
+                  Profile
+                </Link>
+              ) : (
+                  <Link className="nav-item mx-10 sm:mx-6" to="/onBoarding">
+                    Login/Register
+                  </Link>
+                )}
+            </div>
+          )}
       </div>
     </React.Fragment>
 

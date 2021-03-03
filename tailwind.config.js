@@ -20,6 +20,7 @@ module.exports = {
       minWidth: {
         0: "0",
         40: "40px",
+        300 : '300px',
         400: "400px",
         170: "170px",
         "1/4": "25%",
@@ -51,7 +52,10 @@ module.exports = {
         "6/7": "85.7142857%",
         "2/4": "50%",
         '70screen' : '70vw',
-        
+        '60screen' : '60vw',
+        '50screen' : '50vw',
+        '30screen' : '30vw',
+        '40screen' : '40vw',
         "100screen": "100vw",
       },
       height: {

@@ -7,7 +7,7 @@ const FormInput = ({ label, inputType, name, value }) => {
       <div className="relative w-full h-12 mb-4 md:mb-2 ">
         <Field
           type={inputType}
-          className=" form-input mb-5 mb z-10  w-full px-4 text-base outline-none border-b-2 absolute bg-transparent border-green-500 "
+          className=" form-input mb-5 mb z-10  w-full px-4 text-base outline-none border-b-2 absolute bg-transparent border-green-500 text-black "
           name={name}
           value={value}
         />

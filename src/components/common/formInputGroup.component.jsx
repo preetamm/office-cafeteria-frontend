@@ -4,7 +4,7 @@ import FormInput from "./formInput.component";
 const FormInputgroup = ({ type }) => {
   return (
     <React.Fragment>
-      <div className="registration-form items-center flex-col h-auto text-gray-400 min-w-400">
+      <div className="registration-form items-center w-full flex-col h-auto text-gray-400 tablet:min-w-400 ">
         {type === "REGISTER" && (
           <div>
             <FormInput

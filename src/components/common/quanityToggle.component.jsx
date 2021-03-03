@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+
 import Button from "./button.component";
 import { connect, useSelector, useDispatch } from "react-redux";
-import { itemQuantity } from "../../redux/menu/menu.selector";
 import {
   increaseItemQantity,
   decreseItemQuantity,
@@ -23,7 +22,7 @@ const QuantityToggler = ({ id, quantity, item }) => {
       <Button
         label="-"
         text-base
-        className="bg-secondary px-2 rounded text-white"
+        className={` px-2 rounded text-white ${auth.login?.user? 'bg-secondary' : 'bg-gray-400'}`}
         onclick={() => {
           dispatch(decreseItemQuantity({ category: selectedCategory, id: id }));
           dispatch(removeFromCart(item));
@@ -34,7 +33,7 @@ const QuantityToggler = ({ id, quantity, item }) => {
       <Button
         label="+"
         text-base
-        className="bg-secondary px-2 rounded text-white"
+        className={` px-2 rounded text-white ${auth.login?.user? 'bg-secondary' : 'bg-gray-400'}`}
         onclick={() => {
           dispatch(increaseItemQantity({ category: selectedCategory, id: id }));
           dispatch(addToCart(item));
@@ -47,7 +46,7 @@ const QuantityToggler = ({ id, quantity, item }) => {
 
 const makeMapStateToProps = () => {
   const mapStateToProps = (state, ownProp) => {
-    //console.log(state, ownProp);
+  
     const ItemQuantity = getItemQuantity(ownProp.id);
     return {
       quantity: ItemQuantity(state),
