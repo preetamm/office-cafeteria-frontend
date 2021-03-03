@@ -6,21 +6,6 @@ import { ReactComponent as MenuLogo } from "../../icons/menuIcon.svg";
 import { isMobile } from "react-device-detect";
 
 const NavigationBar = ({toggleNavBar, isOpen}) => {
-  /*window.addEventListener('load', function () {
-    var menu = false;
-    document.querySelector('.menu-logo').addEventListener('click', () => {
-      //alert("menu clicked ");
-      //check if menu is opne or not
-      if(!menu){
-        document.getElementById('nav-bar-mobile').style.transform = 'translateX(0%)';
-        menu = true;
-      }else{
-        document.getElementById('nav-bar-mobile').style.transform = 'translateX(-100%)';
-        menu = false;
-      }
-      
-    })
-  })*/
   var { auth } = useSelector((state) => state.authSlice);
   let toggleNav = () => {
     console.log(isOpen);
