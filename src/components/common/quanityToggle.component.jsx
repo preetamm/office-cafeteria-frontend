@@ -7,13 +7,17 @@ import {
 } from "../../redux/menu/menu.slice";
 
 import { addToCart, removeFromCart } from "../../redux/cart/cart.slice";
+import { itemQuantity } from "../../redux/menu/menu.selector";
 import { getItemQuantity } from "../../redux/cart/cart.selector";
 
-const QuantityToggler = ({ id, quantity, item }) => {
+
+const QuantityToggler = ({ id, quantity, item, isCart }) => {
+
   const dispatch = useDispatch();
   const { selectedCategory } = useSelector((state) => state.categorySlice);
   var { auth } = useSelector((state) => state.authSlice);
-
+  if (isCart) console.log({ cartQuantity: quantity })
+  //console.log(`quantity is : ${quantity == 0 }`)
   return (
     <div
       className="quanity rounded bg-white shadow-lg  items-center  flex"
@@ -22,23 +26,23 @@ const QuantityToggler = ({ id, quantity, item }) => {
       <Button
         label="-"
         text-base
-        className={` px-2 rounded text-white ${auth.login?.user? 'bg-secondary' : 'bg-gray-400'}`}
+        className={` px-2 rounded text-white`}
         onclick={() => {
           dispatch(decreseItemQuantity({ category: selectedCategory, id: id }));
-          dispatch(removeFromCart(item));
+          dispatch(removeFromCart({item, quantity}));
         }}
-        isDisabled={auth.login?.user? false : true}
+        isDisabled={auth.login && quantity > 0 ? false : true}
       ></Button>
       <div className="quantity px-2">{quantity}</div>
       <Button
         label="+"
         text-base
-        className={` px-2 rounded text-white ${auth.login?.user? 'bg-secondary' : 'bg-gray-400'}`}
+        className={` px-2 rounded text-white`}
         onclick={() => {
           dispatch(increaseItemQantity({ category: selectedCategory, id: id }));
-          dispatch(addToCart(item));
+          dispatch(addToCart({item, quantity}));
         }}
-        isDisabled={auth.login?.user ? false : true}
+        isDisabled={auth.login ? false : true}
       ></Button>
     </div>
   );
@@ -46,13 +50,19 @@ const QuantityToggler = ({ id, quantity, item }) => {
 
 const makeMapStateToProps = () => {
   const mapStateToProps = (state, ownProp) => {
-  
-    const ItemQuantity = getItemQuantity(ownProp.id);
+    //if(ownProp.isCart) console.log({'itscart' : ownProp})
+    let ItemQuantity;
+    let id = ownProp.id
+   // ownProp.isCart ? ItemQuantity = getItemQuantity(id) : ItemQuantity = itemQuantity(id)
+     console.log(id);
+     ItemQuantity = getItemQuantity(id);
+    const quantity = ItemQuantity(state);
+    if (ownProp.isCart) console.log(`i rerendere map amd qaintiut is : ${quantity}`)
+    // if(ownProp.isCart) console.log({'myquantity' : quantity})
     return {
-      quantity: ItemQuantity(state),
+      quantity: quantity,
     };
   };
-
   return mapStateToProps;
 };
 

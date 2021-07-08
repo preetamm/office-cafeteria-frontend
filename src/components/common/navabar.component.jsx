@@ -4,12 +4,15 @@ import { useSelector } from "react-redux";
 import { ReactComponent as CartLogo } from "../../icons/cartIcon.svg";
 import { ReactComponent as MenuLogo } from "../../icons/menuIcon.svg";
 import { isMobile } from "react-device-detect";
+import NavItem from "./navItem.component";
 
-const NavigationBar = ({toggleNavBar, isOpen}) => {
+
+
+const NavigationBar = ({ toggleNavBar, isOpen }) => {
   var { auth } = useSelector((state) => state.authSlice);
   let toggleNav = () => {
     console.log(isOpen);
-    isOpen? toggleNavBar(false) : toggleNavBar(true)
+    isOpen ? toggleNavBar(false) : toggleNavBar(true)
   }
   return (
     <React.Fragment>
@@ -33,22 +36,15 @@ const NavigationBar = ({toggleNavBar, isOpen}) => {
             </Link>
           </div>
         ) : (
-            <div className="menu-item  flex ">
-              <Link className="nav mx-10 sm:mx-6" to="/">
-                Menu
-            </Link>
-
-              {auth.login?.user ? (
-                <Link className="nav-item mx-10 sm:mx-6" to="/profile">
-                  Profile
-                </Link>
-              ) : (
-                  <Link className="nav-item mx-10 sm:mx-6" to="/onBoarding">
-                    Login/Register
-                  </Link>
-                )}
-            </div>
-          )}
+          <div className="menu-item  flex ">
+            <NavItem urlPath={'/'} label={'Menu'}></NavItem>
+            {auth.login?.user ? (
+              <NavItem urlPath={'/profile'} label={'Profile'}></NavItem>
+            ) : (
+              <NavItem urlPath={'/onBoarding'} label={'Register'}></NavItem>
+            )}
+          </div>
+        )}
       </div>
     </React.Fragment>
 

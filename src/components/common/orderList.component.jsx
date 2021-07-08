@@ -7,10 +7,11 @@ import cartList, { getTotalAmount } from "../../redux/cart/cart.selector";
 const OrderList = ({ cartList, totalAmount }) => {
   console.log(cartList);
   var cartListLength = Object.keys(cartList).length;
-  console.log(cartListLength);
+  console.log('i rerendered ');
   if (cartListLength > 0) {
     var cartItems = [];
     for (const [key, value] of Object.entries(cartList)) {
+      console.log({typeofid : typeof key , id : key})
       cartItems.push(
         <OrderItem
           key={key}
@@ -18,6 +19,7 @@ const OrderList = ({ cartList, totalAmount }) => {
           name={value.name}
           price={value.price}
           item={value}
+          quantity={value.quantity}
         ></OrderItem>
       );
     }

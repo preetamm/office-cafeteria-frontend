@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { LOADING } from '../../constants/constant'
+import { updateCurrentOrder } from '../order/order.slice'
 import axios from "axios";
+import { message } from "antd";
 
 const cart = createSlice({
   name: "cart",
@@ -9,7 +12,6 @@ const cart = createSlice({
   },
   reducers: {
     addToCart: (state, action) => {
-      console.log(action.payload);
       state.cart = _addToCart(state.cart, action.payload);
     },
     removeFromCart: (state, action) => {
@@ -22,59 +24,28 @@ const cart = createSlice({
       state.order = action.payload;
     },
     placeOrderFailed: (state, action) => {
-      state.order = action.payload;
+      state.order = null;
     },
 
   },
 });
 
-const _addToCart = (cart, newItem) => {
-  /* console.log(cart);
+const _addToCart = (cart, { item, quantity }) => {
 
-  if (cart.length === 0) {
-    var updatedQuantity = newItem.quantity + 1;
-    var updatedItem = {...newItem, 'quantity' : updatedQuantity}
-    return [updatedItem];
-
-  }
-  console.log("blaaa");
-  //check if the item already in the catr
-  let newCart = [];
-
-  var isAlreadyExist = false;
-
-  cart.map((item) => {
-    if (item.id === newItem.id) {
-      isAlreadyExist = true;
-      var updatedItem = item;
-      updatedItem.quantity++;
-      newCart.push(updatedItem);
-    } else {
-      newCart.push(item);
-    }
-  });
-
-
-  if (isAlreadyExist) {
-    return newCart;
-  } else {
-    var updatedQuantity = newItem.quantity + 1;
-    var updatedItem = {...newItem, 'quantity' : updatedQuantity}
-    newCart = [...cart, updatedItem];
-    return newCart;
-  }*/
   if (Object.keys(cart).length === 0) {
-    var updatedItem = { ...newItem, quantity: newItem.quantity + 1 };
-    var id = newItem.id;
+    var updatedItem = { ...item, quantity: quantity + 1 };
+    console.log(typeof item.id)
+    var id = item.id;
+    console.log({ 'lolitem': { [id]: updatedItem } })
     return { [id]: updatedItem };
   }
 
   var isAlreadyExist = false;
   let updatedCart = {};
   for (const [key, value] of Object.entries(cart)) {
-    if (key === newItem.id) {
+    if (key === item.id) {
       isAlreadyExist = true;
-      updatedCart[key] = { ...value, ["quantity"]: newItem.quantity + 1 };
+      updatedCart[key] = { ...value, ["quantity"]: quantity + 1 };
     } else {
       updatedCart[key] = { ...value };
     }
@@ -83,52 +54,62 @@ const _addToCart = (cart, newItem) => {
   if (isAlreadyExist) {
     return updatedCart;
   } else {
-    var updatedItem = { ...newItem, quantity: newItem.quantity + 1 };
-    var id = newItem.id;
+    updatedItem = { ...item, quantity: quantity + 1 };
+    id = item.id;
     updatedCart = { ...cart, [id]: updatedItem };
     return updatedCart;
   }
 };
 
-const _removeFromCart = (cart, targetItem) => {
-  /*
-  let newcart = [];
-  cart.map((item) => {
-    if (item.id === targetitem.id) {
-      if (item.quantity > 1) {
-        item.quantity--;
-        newcart.push(item);
-      }
-    } else {
-      newcart.push(item);
-    }
-  });
-  return newcart;
-
-  */
-  let updatedCart = {};
-
-  for (const [key, value] of Object.entries(cart)) {
-    console.log("kkkkkkk");
-    console.log(key === targetItem.id);
-    if (key == targetItem.id) {
-      console.log("kkkkkk222");
+const _removeFromCart = (cart, { item, quantity }) => {
+  let newCart;
+  var id = item.id
+  // var quantity = targetItem.quantity--
+  /* for (const [key, value] of Object.entries(cart)) {
+    var id = parseInt(key)
+    console.log(id === targetItem.id);
+    console.log([key, targetItem.id])
+    if (id === targetItem.id) {
+      console.log(value.quantity)
       if (value.quantity > 1) {
-        //decrese the quanityt
-        updatedCart[key] = { ...value, ["quantity"]: value.quantity - 1 };
+        //decrese the quantity
+        console.log(`yes i reach if block`)
+        var updatedQuantity = value.quantity - 1
+        updatedCart[key] = { ...value, ["quantity"]: updatedQuantity };
+        console.log(updatedCart[key])
       }
     } else {
-      updatedCart[key] = { ...value };
+      console.log(`yes i reach else block`)
+      updatedCart[key] = { ...value }
     }
   }
-  return updatedCart;
+  console.log(updatedCart) */
+  //check if id exist in cart incase 
+  if (!cart[id]) {
+    return cart
+  }
+  if (quantity > 1) {
+
+    let updatedItem = { ...item, quantity: quantity - 1 }
+    newCart = { ...cart, [`${id}`]: updatedItem }
+    return newCart
+    //newCart[targetItem.id] = { ...targetItem, quantity : targetItem.quantity-- }
+  } else {
+    delete cart[id]
+    return cart
+  }
+
+
+
+  //select item using id
+  //put that into new object with other objects
 };
 
 
 export function placeOrder(cartDetails) {
   return async (dispatch) => {
-    dispatch(placeOrderStarted("Loading"));
-    console.log(cartDetails)
+    dispatch(placeOrderStarted(LOADING));
+    // console.log(cartDetails);
     try {
       const response = await axios({
         method: "post",
@@ -139,12 +120,19 @@ export function placeOrder(cartDetails) {
       });
 
       console.log(response);
+      dispatch(placeOrderSuccess(null))
+      dispatch(updateCurrentOrder(response.data.ordertails))
+      message.success('Order Placed successfully')
     } catch (error) {
+      dispatch(placeOrderFailed())
+      message.error('order Failed!')
       console.log(error);
     }
+
   };
 
+
 }
-export const { addToCart, removeFromCart, placeOrderStarted } = cart.actions;
+export const { addToCart, removeFromCart, placeOrderStarted, placeOrderSuccess, placeOrderFailed } = cart.actions;
 
 export default cart.reducer;

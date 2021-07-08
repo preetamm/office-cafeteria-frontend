@@ -1,7 +1,7 @@
 
 import "./App.css";
 import "antd/dist/antd.css";
-import { motion } from "framer-motion";
+
 import { isMobile } from "react-device-detect";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -13,9 +13,15 @@ import CartPage from "./pages/cartPage/cartPage.page";
 import ProfilePage from "./pages/profilePage/profilePage.page";
 import OnBoarding from "./pages/onBoardingPage/onboardingPage.page";
 import { useState } from "react";
+import DeliveryTime from "./components/common/deliveryTime.component";
+import { useSelector } from "react-redux";
+
+
 
 function App() {
   const [isOpen, toggleNavBar] = useState(false);
+  const {currentOrder} = useSelector((state) => state.orderSlice)
+  var currentOrderTimeInMin = currentOrder && currentOrder[currentOrder.length - 1].timing
   return (
     <div className={`App`}> 
       <Router>
@@ -27,6 +33,7 @@ function App() {
           <Route path="/cart" component={CartPage}></Route>
           <Route path="/" component={Homepage}></Route>
         </Switch>
+        {(currentOrder?.length >= 1) && <DeliveryTime hoursMinSecs={{hours: 0, minutes: currentOrderTimeInMin , seconds: 0 }} currentOrder={currentOrder}></DeliveryTime> }
       </Router>
     </div>
   );

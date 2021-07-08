@@ -7,7 +7,7 @@ const OrderItem = ({name, price, quantity, id, item}) => {
     <div className="order-item font-medium text-sm flex px-2 py-2 ">
       <div className="order-name mr-auto">{name}</div>
       <div className="order-price mr-4">${price}</div>
-      <QuantityToggler id={id} quantity={quantity} item={item}></QuantityToggler>
+      <QuantityToggler id={id} isCart={true} item={item}></QuantityToggler>
     </div>
   );
 };

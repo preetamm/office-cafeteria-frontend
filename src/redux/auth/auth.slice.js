@@ -45,7 +45,6 @@ export const {
 export function registerUser(registrationData) {
   return async (dispatch) => {
     dispatch(registerUserStarted("Loading"));
-    console.log("blaaa");
     try {
       const response = await axios({
         method: "post",
@@ -84,7 +83,7 @@ export function loginUser(loginData) {
         },
       });
 
-      console.log(response);
+    
       if (response.data.status === "Success") {
         dispatch(loginUserSuccess({user : response.data.user}));
         message.success(response.data.message);

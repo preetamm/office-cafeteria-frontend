@@ -16,6 +16,7 @@ export const getItemQuantity = (id) => {
     }
 
     //check if the menu present in cart
+    console.log({'fuckid' : id , 'item' : cart[id]})
     if (cart[id]) {
       return cart[id].quantity;
     } else {

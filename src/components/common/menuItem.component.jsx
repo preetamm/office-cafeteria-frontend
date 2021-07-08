@@ -24,11 +24,11 @@ const MenuItem = ({ item,  id }) => {
           <div className="description flex flex-col py-2 items-start bg-white pl-8 pr-5  rounded-lg ">
             <div className="title text-base font-bold">{item.name}</div>
             <div className="tagline text-xs text-left text-secondary ">
-             {item.Description}
+             {item.description}
             </div>
             <div className="price-quantity items-center  self-stretch  flex mt-4">
               <div className="price mr-auto">${item.price}</div>
-              <QuantityToggler id={id}  item={item} ></QuantityToggler>
+              <QuantityToggler  id={id}  item={item} ></QuantityToggler>
             </div>
           </div>
         </div>

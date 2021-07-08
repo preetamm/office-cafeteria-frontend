@@ -23,7 +23,14 @@ const HomePageDesktop = () => {
           </div>
           <div className="menu-list-section flex items-center flex-col h-full content-center w-73">
             <CyclicMenuTiming></CyclicMenuTiming>
-            <MenuContainer></MenuContainer>
+            <div className="menu-desktop-container-wrapper mt-3">
+              <div className="title text-center text-header text-base">
+                Breakfast Menu
+              </div>
+              <div className="menu-desktop-container grid grid-cols-1  laptop:grid-cols-2 laptop:gap-y-4  auto-rows-max h-60screen  grid-flow-row overflow-y-scroll self-stretch">
+                <MenuContainer></MenuContainer>
+              </div>
+            </div>
           </div>
         </div>
         <div className="order-section max-h-650 bg-opacity-50 w-27 h-full px-5 bg-secondary">

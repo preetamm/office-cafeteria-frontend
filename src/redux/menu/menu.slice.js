@@ -7,7 +7,111 @@ const menu = createSlice({
   name: "category",
   initialState: {
     menuList: {
-      [categories.CYCLIC_MENU]: [
+   [categories.CYCLIC_MENU]: [],
+   [categories.FAST_FOOD]: [],
+   [categories.DESSERT]: [],
+   [categories.BEVERAGES]: [],
+    },
+    loading : false
+  },
+  reducers: {
+    increaseItemQantity: (state, action) => {
+      console.log(state.menuList);
+      state.menuList = increaseQuantity(state, action);
+    },
+    decreseItemQuantity: (state, action) => {
+      state.menuList = decreaseQuantity(state, action);
+    },
+    getMenuStarted: (state, action) => {
+      state.loading = !state.loading
+    },
+    getMenuListSuccess: (state, action) => {
+      state.menuList = { ...state.menuList, ...action.payload }
+      state.loading = !state.loading
+    },
+    getMenuListFailed: (state, action) => {
+      state.loading = !state.loading
+    },
+  },
+});
+
+const increaseQuantity = (state, action) => {
+  const { category, id } = action.payload;
+  let categoryList = state.menuList[category];
+
+  categoryList = categoryList.map((item) => {
+    if (item.id === id) {
+      item.quantity++;
+    }
+    return item
+  });
+  console.log(categoryList)
+  state.menuList[category] = categoryList
+  state.menuList = { ...state.menuList };
+  console.log(state.menuList);
+  return state.menuList;
+};
+
+const decreaseQuantity = (state, action) => {
+  const { category, id } = action.payload;
+  let categoryList = state.menuList[category];
+
+  categoryList.map((item) => {
+    if (item.id === id) {
+      if (item.quantity > 0) {
+        item.quantity--;
+      }
+    }
+  });
+
+  console.log(categoryList)
+  state.menuList[category] = categoryList
+  state.menuList = { ...state.menuList };
+  console.log(state.menuList);
+  return state.menuList;
+};
+
+export const {
+  changeCategory,
+  increaseItemQantity,
+  decreseItemQuantity,
+  getMenuStarted,
+  getMenuListSuccess,
+  getMenuListFailed
+} = menu.actions;
+
+
+export function getMenuList(category) {
+  return async (dispatch) => {
+    try {
+      dispatch(getMenuStarted())
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:5000/api/menu/getmenulist",
+        data: {
+          data: { category: category },
+        },
+      });
+      response.data.map((el) => {
+        el.id = el._id
+        el.quantity =  0;
+      })
+      console.log(response.data)
+      dispatch(getMenuListSuccess({[categories[category]]: response.data}))
+    } catch (error) {
+      dispatch(getMenuListFailed())
+      console.log(error.message)
+    }
+  }
+}
+
+
+export default menu.reducer;
+
+
+//select
+/* 
+   [categories.CYCLIC_MENU]: [
         {
           name: "Eggs and bacon",
           Description: "Deep fried fries with a side of tomato ketchup. 20g",
@@ -51,41 +155,42 @@ const menu = createSlice({
           id: 6,
         },
       ],
+      
       [categories.BEVERAGES]: [
         {
           name: "coka cola",
           Description: "best cola",
           price: "3",
           quantity: 0,
-          id: 1,
+          id: 7,
         },
         {
           name: "coka cola",
           Description: "best cola",
           price: "$5",
           quantity: 0,
-          id: 2,
+          id: 8,
         },
         {
           name: "coka cola",
           Description: "best cola",
           price: 5,
           quantity: 0,
-          id: 3,
+          id: 9,
         },
         {
           name: "coka cola",
           Description: "best cola",
           price: 7,
           quantity: 0,
-          id: 4,
+          id: 10,
         },
         {
           name: "coka cola",
           Description: "best cola",
           price: 8,
           quantity: 0,
-          id: 5,
+          id: 11,
         },
       ],
       [categories.FAST_FOOD]: [
@@ -95,7 +200,7 @@ const menu = createSlice({
           price: 25,
           category: "FAST_FOOD",
           quantity: 0,
-          id: "600c59ba43ae166d37e904c6",
+          id: 12,
         },
         {
           name: "Taco",
@@ -103,7 +208,7 @@ const menu = createSlice({
           price: 45,
           category: "FAST_FOOD",
           quantity: 0,
-          id: "600c5a9443ae166d37e904c7",
+          id: 13,
         },
         {
           name: "Burger",
@@ -112,7 +217,7 @@ const menu = createSlice({
           price: 50,
           category: "FAST_FOOD",
           quantity: 0,
-          id: "600c5b3643ae166d37e904c8",
+          id: 14,
         },
         {
           name: "Pizza",
@@ -121,7 +226,7 @@ const menu = createSlice({
           price: 60,
           category: "FAST_FOOD",
           quantity: 0,
-          id: "600c5bef43ae166d37e904c9",
+          id: 15,
         },
         {
           name: "Chicken Nuggets",
@@ -129,94 +234,14 @@ const menu = createSlice({
           price: 35,
           category: "FAST_FOOD",
           quantity: 0,
-          id: "600c5cad43ae166d37e904ca",
+          id: 16,
         },
         {
           name: "Fast Food",
           Description: "thr bestest quality fast food in the world",
           price: 6,
           quantity: 0,
-          id: '600c655b43ae166d37e904d0',
+          id: 17,
         },
       ],
-    },
-  },
-  reducers: {
-    increaseItemQantity: (state, action) => {
-      console.log(state.menuList);
-      state.menuList = increaseQuantity(state, action);
-    },
-    decreseItemQuantity: (state, action) => {
-      state.menuList = decreaseQuantity(state, action);
-    },
-    getMenuStarted : (state, action) => {
-      state.menuList = action.payload
-    },
-    getMenuListSuccess : (state, action) => {
-      state.menuList = {...state.menuList, ...action.payload}
-    },
-    getMenuListFailed : (state, action) => {
-      state.menuList = action.payload
-    },
-  },
-});
-
-const increaseQuantity = (state, action) => {
-  const { category, id } = action.payload;
-  let categoryList = state.menuList[category];
-
-  categoryList = categoryList.map((item) => {
-    if (item.id === id) {
-      item.quantity++;
-    }
-  });
-
-  state.menuList = { ...state.menuList, ...categoryList };
-  console.log(state.menuList);
-  return state.menuList;
-};
-
-const decreaseQuantity = (state, action) => {
-  const { category, id } = action.payload;
-  let categoryList = state.menuList[category];
-
-  categoryList = categoryList.map((item) => {
-    if (item.id === id) {
-      if (item.quantity > 0) {
-        item.quantity--;
-      }
-    }
-  });
-
-  state.menuList = { ...state.menuList, ...categoryList };
-  console.log(state.menuList);
-  return state.menuList;
-};
-
-export const {
-  changeCategory,
-  increaseItemQantity,
-  decreseItemQuantity,
-} = menu.actions;
-
-
-export function getMenuList(category){
-  console.log(category);
-  return async(dispatch) => {
-    try{
-      const response = await axios({
-        method: "post",
-        url: "http://localhost:5000/api/menu/getmenulist",
-        data: {
-          data: {category : category},
-        },
-      });
-      console.log(response)
-    }catch(error){
-      console.log(error.message)
-    }
-  }
-}
-
-
-export default menu.reducer;
+*/

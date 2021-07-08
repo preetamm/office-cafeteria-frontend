@@ -1,5 +1,5 @@
 import React from "react";
-
+import { LOADING } from '../../constants/constant'
 import { ReactComponent as GoogleLogo } from "../../icons/googleIcon.svg";
 import { ReactComponent as PaypalLogo } from "../../icons/paypalIcon.svg";
 import { ReactComponent as DebitLogo } from "../../icons/debitIcon.svg";
@@ -10,10 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { placeOrder } from "../../redux/cart/cart.slice";
 
 const OrderForm = () => {
-  var { cart } = useSelector((state) => state.cartSlice);
+  var { cart, order } = useSelector((state) => state.cartSlice);
   var cartLength = Object.keys(cart).length;
   var dispatch = useDispatch();
-  
+
   return (
     <div className="form">
       <Formik
@@ -136,15 +136,14 @@ const OrderForm = () => {
               )}
             </div>
             <div className="button-container mt-5  px-8">
-              <div className="picked-value"></div>
               <Button
-                label="PAY"
-                className={` rounded-lg text-white shadow-inner  font-semibold  py-2  px-24 ${
-                  values.orderMode && values.paymentMode
-                    ? "bg-primary"
-                    : "bg-gray-400"
-                } `}
+                label={order === LOADING ? LOADING : 'CONFIRM'}
+                className={` rounded-lg text-white shadow-inner  font-semibold  py-2 w-full max-w-400 `}
                 type={"submit"}
+                isDisabled={values.orderMode && values.paymentMode && cartLength
+                  ? false
+                  : true
+                } 
               ></Button>
             </div>
           </Form>

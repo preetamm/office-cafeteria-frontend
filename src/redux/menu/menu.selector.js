@@ -1,8 +1,9 @@
 import { createSelector } from "reselect";
-import categorySlice from "../category/category.slice";
+
 import categories from "../../constants/category";
 
 const selectMenu = (state) => state.menuListSlice;
+
 const selectCategory = (state) => state.categorySlice;
 
 const selectMenuList = createSelector(selectMenu, (menuListSlice) => {
@@ -45,8 +46,9 @@ export const itemQuantity = (id) => {
     categoriedMenuList.map((item) => {
       //console.log(item.id);
       if (item.id === id) {
-        console.log("found");
-        quantity = item.qantity;
+        console.log("id");
+        quantity = item.quantity;
+        console.log({'quantity': quantity})
       }
       console.log(quantity);
     });
