@@ -1,18 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import categories from "../../constants/category";
 import axios from "axios";
-import { message } from "antd";
 
 const menu = createSlice({
   name: "category",
   initialState: {
     menuList: {
-   [categories.CYCLIC_MENU]: [],
-   [categories.FAST_FOOD]: [],
-   [categories.DESSERT]: [],
-   [categories.BEVERAGES]: [],
+      [categories.CYCLIC_MENU]: [],
+      [categories.FAST_FOOD]: [],
+      [categories.DESSERT]: [],
+      [categories.BEVERAGES]: [],
     },
-    loading : false
+    loading: false,
   },
   reducers: {
     increaseItemQantity: (state, action) => {
@@ -23,14 +22,14 @@ const menu = createSlice({
       state.menuList = decreaseQuantity(state, action);
     },
     getMenuStarted: (state, action) => {
-      state.loading = !state.loading
+      state.loading = !state.loading;
     },
     getMenuListSuccess: (state, action) => {
-      state.menuList = { ...state.menuList, ...action.payload }
-      state.loading = !state.loading
+      state.menuList = { ...state.menuList, ...action.payload };
+      state.loading = !state.loading;
     },
     getMenuListFailed: (state, action) => {
-      state.loading = !state.loading
+      state.loading = !state.loading;
     },
   },
 });
@@ -43,12 +42,10 @@ const increaseQuantity = (state, action) => {
     if (item.id === id) {
       item.quantity++;
     }
-    return item
+    return item;
   });
-  console.log(categoryList)
-  state.menuList[category] = categoryList
+  state.menuList[category] = categoryList;
   state.menuList = { ...state.menuList };
-  console.log(state.menuList);
   return state.menuList;
 };
 
@@ -56,7 +53,7 @@ const decreaseQuantity = (state, action) => {
   const { category, id } = action.payload;
   let categoryList = state.menuList[category];
 
-  categoryList.map((item) => {
+  categoryList.forEach((item) => {
     if (item.id === id) {
       if (item.quantity > 0) {
         item.quantity--;
@@ -64,10 +61,8 @@ const decreaseQuantity = (state, action) => {
     }
   });
 
-  console.log(categoryList)
-  state.menuList[category] = categoryList
+  state.menuList[category] = categoryList;
   state.menuList = { ...state.menuList };
-  console.log(state.menuList);
   return state.menuList;
 };
 
@@ -77,14 +72,13 @@ export const {
   decreseItemQuantity,
   getMenuStarted,
   getMenuListSuccess,
-  getMenuListFailed
+  getMenuListFailed,
 } = menu.actions;
-
 
 export function getMenuList(category) {
   return async (dispatch) => {
     try {
-      dispatch(getMenuStarted())
+      dispatch(getMenuStarted());
       const response = await axios({
         method: "post",
         url: "http://localhost:5000/api/menu/getmenulist",
@@ -92,22 +86,18 @@ export function getMenuList(category) {
           data: { category: category },
         },
       });
-      response.data.map((el) => {
-        el.id = el._id
-        el.quantity =  0;
-      })
-      console.log(response.data)
-      dispatch(getMenuListSuccess({[categories[category]]: response.data}))
+      response.data.forEach((el) => {
+        el.id = el._id;
+        el.quantity = 0;
+      });
+      dispatch(getMenuListSuccess({ [categories[category]]: response.data }));
     } catch (error) {
-      dispatch(getMenuListFailed())
-      console.log(error.message)
+      dispatch(getMenuListFailed());
     }
-  }
+  };
 }
 
-
 export default menu.reducer;
-
 
 //select
 /* 

@@ -1,8 +1,4 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import categories from "../../constants/category";
-import CategoryItem from "./categoryItem.component";
-import { changeCategory } from "../../redux/category/category.slice";
 import Category from "../common/category.component";
 
 const CategoryDesktop = () => {

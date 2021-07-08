@@ -64,26 +64,8 @@ const _addToCart = (cart, { item, quantity }) => {
 const _removeFromCart = (cart, { item, quantity }) => {
   let newCart;
   var id = item.id
-  // var quantity = targetItem.quantity--
-  /* for (const [key, value] of Object.entries(cart)) {
-    var id = parseInt(key)
-    console.log(id === targetItem.id);
-    console.log([key, targetItem.id])
-    if (id === targetItem.id) {
-      console.log(value.quantity)
-      if (value.quantity > 1) {
-        //decrese the quantity
-        console.log(`yes i reach if block`)
-        var updatedQuantity = value.quantity - 1
-        updatedCart[key] = { ...value, ["quantity"]: updatedQuantity };
-        console.log(updatedCart[key])
-      }
-    } else {
-      console.log(`yes i reach else block`)
-      updatedCart[key] = { ...value }
-    }
-  }
-  console.log(updatedCart) */
+ 
+ 
   //check if id exist in cart incase 
   if (!cart[id]) {
     return cart
@@ -109,7 +91,7 @@ const _removeFromCart = (cart, { item, quantity }) => {
 export function placeOrder(cartDetails) {
   return async (dispatch) => {
     dispatch(placeOrderStarted(LOADING));
-    // console.log(cartDetails);
+
     try {
       const response = await axios({
         method: "post",
@@ -118,8 +100,6 @@ export function placeOrder(cartDetails) {
           data: cartDetails,
         },
       });
-
-      console.log(response);
       dispatch(placeOrderSuccess(null))
       dispatch(updateCurrentOrder(response.data.ordertails))
       message.success('Order Placed successfully')

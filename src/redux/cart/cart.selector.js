@@ -3,7 +3,6 @@ import { createSelector } from "reselect";
 const selectCartSlice = (state) => state.cartSlice;
 
 const cartList = createSelector([selectCartSlice], (cartSlice) => {
-  console.log(cartSlice.cart);
   return cartSlice.cart;
 });
 
@@ -16,7 +15,6 @@ export const getItemQuantity = (id) => {
     }
 
     //check if the menu present in cart
-    console.log({'fuckid' : id , 'item' : cart[id]})
     if (cart[id]) {
       return cart[id].quantity;
     } else {
@@ -30,7 +28,6 @@ export const getTotalAmount =  createSelector([cartList], (cart) => {
     let cartLength = Object.keys(cart).length;
     if(cartLength === 0) return 0
     for (const [key, value] of Object.entries(cart)){
-        console.log(value)
         var price = value.price
         var quantity = value.quantity
         totalAmount = totalAmount + (price * quantity)
