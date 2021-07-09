@@ -34,4 +34,4 @@ const DeliveryTime = ({  hoursMinSecs, currentOrder }) => {
     )
 }
 
-export default DeliveryTime;
+export default DeliveryTime; 
